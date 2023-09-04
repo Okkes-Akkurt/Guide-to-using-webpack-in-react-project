@@ -2,7 +2,7 @@
 
 İlk olarak :
 
-`npm init -y`
+```npm init -y```
 
 komutu ile package.json dosyasını oluşturalım.
 Daha sonra oluşturulan bu dosya içerisinde gördüğümüz üzere ana dosya olarak index.js sayfası var. Kök dizinde index.js adında bir dosya oluşturalım.
@@ -11,9 +11,9 @@ Daha sonra oluşturulan bu dosya içerisinde gördüğümüz üzere ana dosya ol
 
 işte gerekli npm komutları :
 
-`npm i webpack --save-dev`
+```npm i webpack --save-dev```
 
-`npm i webpack-cli --save-dev`
+```npm i webpack-cli --save-dev```
 
 webpack-cli paketi sayasinde webpack komutlarını kullanabiliyor olacağız.
 
@@ -39,7 +39,7 @@ Eğer komut satırında "... compiled successfully ..." mesajını gördüyseniz
 
 Şimdi package.json doyamıza bir script daha ekleyelim.
 
-`"build": "webpack --mode production"`
+```"build": "webpack --mode production"```
 
 Bu scripti çalıştırdığınzda bundle.js dosyasının daha az alan kapladığını yani sıkıştırdığını göreceksiniz. Bu script projenin geliştirme evresi bittikten kullanılır.
 
@@ -71,7 +71,7 @@ Buraya kadar yaptıklarrımız sadece webpack konfigürasyonu içindi şimdi dev
 
 Bunun için gerekli komut :
 
-`npm i webpack-dev-server --save-dev`
+```npm i webpack-dev-server --save-dev```
 
 Biliyorum sevmeyeceksiniz ama devServer 'i kullanmak için webpack.config.js dosyasını güncellememiz lazım ve güncel hali :
 
@@ -94,30 +94,30 @@ module.exports = {
 
 Projemizi devServer kullanarak çalıştırmak için yeni bir script yazıp package.json dosyasının içine dahil ediyoruz. İşte script :
 
-`"start": "webpack-dev-server --mode development --open"`
+```"start": "webpack-dev-server --mode development --open"```
 
 localhost:8080'de açılan sayfanın konsol kısmında daha önce yazdığımız "Hello World" yazısını görebiliriz.
 
 
 Sıra geldi react'ı ve sass'ı dahil etmeye. Bunun için aşağıdaki komutları sırasıyla çalıştırın.
 
-`npm i react react-dom --save`
+```npm i react react-dom --save```
 
 Eğer react projesini `npx create-react-app` aracılığya kurduysanız package.json dosyasında
 `"build": "webpack --config webpack.config.js"` değişikliğini yapın ve dist klasörünün ismini hem dosya dizninde hemde webpack.config.js dosyasında build olarak değiştirin.
 
 React.js'i dahil ettik şimdi sırada babel.js'i yükleyeceğiz.
 
-`npm i @babel/core babel-loader --save-dev`
+```npm i @babel/core babel-loader --save-dev```
 
 Üstteki komut temel babel'i yüklerken loader paketi ise js ve jsx uzantılı dosyaları taramak için yüklenir. Alttaki komutta ise preset-env paketi ES6 ve sonrası js kodlarını ES5 kodalrına dönüştürür. preset-react paketi ise react kodalrını js kodlarına dönüştürür.
 
-`npm i @babel/preset-env @babel/preset-react --save-dev`
+```npm i @babel/preset-env @babel/preset-react --save-dev```
 
 
 İsteğe bağlı olarak sass yüklemek için :
 
-`npm i sass sass-loader style-loader css-loader --save-dev`
+```npm i sass sass-loader style-loader css-loader --save-dev```
 
 
 Bu paketleri yükledikten sonra webpack.config.js dosyasında bazı ayarlamalar yapıldıktan sonraki hali :
@@ -174,7 +174,7 @@ createRoot(document.getElementById('root')).render(<App />);
 
 Son olarak :
 
-`npm i babel-polyfill --save`
+```npm i babel-polyfill --save```
 
 paketini yükleyerek async-await fonsiyon dönüşümleri sağlanabilir aksi halde asenkron işlemlerde sorun yaşayabiliriz ve webpack.config.js dosyasının nihai hali aşağıdaki gibidir.
 
@@ -182,7 +182,7 @@ paketini yükleyerek async-await fonsiyon dönüşümleri sağlanabilir aksi hal
 const path = require('path');
 
 module.exports = {
-    entry: ['babel-polyfill','./src/js/index.js'],
+    entry: ['babel-polyfill', './src/js/index.js'],
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'js/bundle.js',
@@ -197,13 +197,14 @@ module.exports = {
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-react'],
+                    },
                 },
             },
             {
                 test: /\.scss$/,
-                use: [
-                    'style-loader', 'css-loader', 'sass-loader'
-                    ],
+                use: ['style-loader', 'css-loader', 'sass-loader'],
             },
         ],
     },
